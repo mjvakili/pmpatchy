@@ -1,4 +1,5 @@
 \documentclass[english,usenatbib]{mn2e}
+%\documentclass[draft]
 \usepackage{mn2e-breakabs}
 \usepackage{url}
 \usepackage[a4paper,margin=0.8in]{geometry}
@@ -179,8 +180,17 @@ In \textsc{FastPM}, the kick and drift steps of the PM codes are modified such t
 
 Moreover, \citet{fastpm} shows that running the code with relatively few time steps, and applying a friends-of-friend (hereafter fof) halo finder (\citealt{fof}) to the density field, one can accurately recover the redshift space power spectrum of the fof halos of TreePM accurate $N$-body solver (\citealt{treepm}) down to $k \sim 0.5 \; \hperm$ . The linking length of 0.2 was chosen to be consistent with other works in the literature (\citealt{cola2013}). In this work we run the \textsc{FastPM} code with 10 time steps. 
 
+\tod{In $N$-body simulations, dark matter density field is evolved by solving the Boltzmann and Poisson equations in an expanding background. Particle Mesh gravity solvers are a class of $N$-body solvers in which the evolution of the density field is governed by the dynamic of dark matter particles. These dark matter particles are evolved with a finite number of time steps that are often linearly or logarithmically spaced in scale factor.}
+
+\tod{In a \textsc{PM} solver, density field is realized on a mesh with an interpolation scheme (for example CIC) that assigns particles to grid points. 
+Then the gravitational Potential (and subsequently the gravitational force) is estimated by solving the Poisson equation. This grid-based estimation of gravitational forces will result in compensation of accuracy on scales comparable to the spacing between grid points. In \textsc{TreePM} algorithm, small-scale force calculation can be fully resolved by direct summation of pairs with spacing comparable to the spacing between grid points. By growth of the matter overdensity however, the computing time required for the direct summation scheme quickly increases.} 
+
+\tod{The time steps in a \textsc{PM} simulation are either linearly or logarithmically spaced in scale factor. Logarithmic spacing of time steps have the disadvantage of losing accuracy in terms of small-scale power and halo mass function. On the other hand, choosing time steps that are linear in scale factor will lead to more accurate clustering on small scales. It is important to note that finite number of time steps in \textsc{PM} simulations results in inaccurate large-scale growth.}
+
+\tod{In \textsc{FastPM}, corrections are applied to the equations of motions of particles such that exact large-scale growth is imposed. In particular, the error in large scale growth is corrected by using Z\'{e}ldovic equation of motions to modify the kick and drift operations in a pure PM algorithm. In a PM simulation, the drift operator changes the position of each particle by keeping its momentum fixed. On the other hand, the kick operator changes the momentum of each particle while leaving its position unchanged. The modified Kick and Drift operators of \textsc{FastPM} are derived by exact integration of the Z\'{e}ldovic Approximation equations of motion. As a result, exact large scale growth is imposed in \textsc{FastPM} and in the limit of infinitesimal time steps the Kick and Drift operators of \textsc{FastPM} converge to those of a standard \textsc{PM} algorithm.}
+
 In this work we will use as a reference the high-resolution $N$-body BigMultiDark simulation described in more detail in section \S \ref{sec:reference}.
-A comparison of the dark matter density fields obtained with the different methods is shown in Fig.~\ref{fig:darkmatter}. While the structures in the high-resolution $N$-body simulation and the low-resolution \textsc{FastPM} simulation look very similar inspite of having very different resolutions ($3840^3$ vs $960^3$ particles), the low-resolution \textsc{alpt} simulation looks more diffuse due to the exaggerated shell crossing inherent to LPT based methods. We will study the impact of this inaccuracy in more detail in section \S \ref{sec:stats}. 
+A comparison of the dark matter density fields obtained with the different methods is shown in Fig.~\ref{fig:darkmatter}. While the structures in the high-resolution $N$-body simulation and the low-resolution \textsc{FastPM} simulation look very similar in spite of having very different resolutions ($3840^3$ vs $960^3$ particles), the low-resolution \textsc{alpt} simulation looks more diffuse due to the exaggerated shell crossing inherent to LPT based methods. We will study the impact of this inaccuracy in more detail in section \S \ref{sec:stats}. 
 
 \subsection{Sampling halos from the density field}
 \label{sec:bias}
@@ -243,25 +253,48 @@ The bias parameters are estimated such that the statistical summaries of the hal
 By construction, the \textsc{patchy} mocks reproduce the exact number density of objects in the reference catalog. This comes from the particular choice of normalization in the deterministic bias relation (see Eqs.~\ref{eq:deterministic},\ref{eq:normalization}). In this work, we follow \citet{kitaura2015} and constrain the bias parameters with the halo PDF and the two-point statistics $\xi_{2}$. These two quantities can be computed very fast and the skewness of the halo PDF determines the three point statistics. Given the bias parameters found fitting the PDF and the two-point statistics, we will demonstrate a comparison between the approximate mocks and the reference catalog in terms of the two- and three-point statistics. 
 
 We simultaneously fit the real-space power spectrum $P(k)$ and the PDF $\rho(n)$ of the \textsc{patchy} halo density field to $P(k)$ and $\rho(n)$ measured for the BigMuliDark halo catalog. Specifically, constraints on $\theta = \{\delta_{\rm th},\alpha, \rho_{\epsilon},\epsilon, \beta\}$ are found by sampling from the posterior probability $p(\theta|\mathrm{data}) \propto p(\mathrm{ref}|\theta)p(\theta)$, where $\mathrm{ref}$ denotes the combination $\{P_{\rm ref} (k), \rho_{\rm ref}(n)\}$, and the likelihood $p(\mathrm{ref}|\theta)$ is given by
+
+\be
+p\big(\mathrm{ref}|\theta \big) = p\big(P_{\rm ref}(k)|\theta \big ) p\big(\rho_{\rm ref}(n)|\theta \big),
+\label{eq:probs}
+\ee
+where Gaussian likelihoods are assumed for $P_{\rm ref}(k)$ and $\rho_{\rm ref}(n)$:
 \ba
--2\ln p(\mathrm{ref}|\theta) = \Sigma_{k}\frac{\big(P_{\rm ref}(k)-P_{\rm mock}(k)\big){\sigma^{2}_{k}}} \nonumber \\
-+ \Sigma_{n}\frac{\big(\rho_{\rm ref}(n)-\rho_{\rm mock}(n)\big)}{\sigma^{2}_{n}}.
+p\big(P_{\rm ref}(k)|\theta \big ) &=& \prod_{k} \frac{1}{\sqrt{2\pi\sigma_k^2}} \\ 
+&\times& \exp[\frac{-1}{2\sigma_k^{2}}]
+\ea
+%p\big(P_{\rm ref}(k)|\theta \big ) &=&\prod_{k} \frac{\exp\big[\frac{\big-(P_{\rm ref}(k)-P_{\rm mock}(k)\big)^{2}}{2\sigma_k^2}\big]}{\sqrt{2\pi\sigma_k^2}},
+%\ea
+
+\ba
+-2\ln p(\mathrm{ref}|\theta) = \Sigma_{k}\frac{\big(P_{\rm ref}(k)-P_{\rm mock}(k)\big)^{\tod{2}}}{\sigma^{2}_{k}} \nonumber \\
++ \Sigma_{n}\frac{\big(\rho_{\rm ref}(n)-\rho_{\rm mock}(n)\big)^{\tod{2}}}{\sigma^{2}_{n}}.
 \label{eq:like}
 \ea
-For the purpose of estimating the bias parameters, we find it sufficient to assume simple uncorrelated noise terms $\{\sigma_{k},\sigma_{n}\}$ in the above likelihood (\ref{eq:like}). We assume $\sigma_{k}^{2}$ to be $4\pi^{2} P_{\rm ref}^{2}(k)/(V_{\rm box}k^{2}\Delta k)$, and $\sigma_n^{2}$ to be $N_n$ where $N_n$ is the number of cells containing $n$ number of halos (including parent halos and subhalos). Furthermore, we choose a flat prior for all parameters of the bias model with the following lower and upper bounds: $-1<\delta_{\rm th}<2$, $0<\alpha<1$, $0<\beta<1$, $0<\rho_{\epsilon}<1$, and $0<\epsilon<1$.
+For the purpose of estimating the bias parameters, we find it sufficient to assume simple uncorrelated noise terms $\{\sigma_{k},\sigma_{n}\}$ in the above likelihood (\ref{eq:like}). We assume $\sigma_{k}^{2}$ to be $4\pi^{2} P_{\rm ref}^{2}(k)/(V_{\rm box}k^{2}\Delta k)$, and $\sigma_n^{2}$ to be $N_n$ where $N_n$ is the number of cells containing $n$ number of halos (including parent halos and subhalos).
+
+\tod{In Eq.~\ref{eq:like}, a Gaussian likelihood is assumed. It is worth noting that the relative weighting between the two terms in the likelihood function is determined by $\sigma_k$ and $\sigma_n$. For instance, a more coarse sampling of the power spectrum will increase $\delta k$ and as a result, it will reduce $\sigma_k$. At the same time, such coarse sampling of the power spectrum reduces the prediction strength of the denominator. Furthermore, Dropping every other term in the summation corresponding to the PDF will decrease $N_n$ and $\sigma_n.$} 
+
+Furthermore, we choose a flat prior for all parameters of the bias model with the following lower and upper bounds: $-1<\delta_{\rm th}<2$, $0<\alpha<1$, $0<\beta<1$, $0<\rho_{\epsilon}<1$, and $0<\epsilon<1$.
 
 For sampling from the posterior probability, given the likelihood function (Eq.~\ref{eq:like}) and the prior, we use the affine-invariant ensemble MCMC sampler (\citealt{goodmanweare}) and its implementation \textsc{emcee} (\citealt{emcee}). In particular, we run the \textsc{emcee} code with 10 walkers and we run the chains for at least 2000 iterations. We discard the first 500 chains as burn-in samples and use the remainder of the chains as production MCMC chains. Furthermore, we perform Gelman-Rubin convergence test (\citealt{grtest}) to ensure that the MCMC chains have reached convergence.
 
 \subsection{Comparison with other approximate methods}
 
-\tod{Pioneering fast halo/galaxy generating methods have relied on approximate gravity solvers based on Lagrangian perturbation theory (LPT:\citealt{buchert1993,bouchet1995,catelan1995,scocci2002}) to compute the position and mass of the objects, such as \textsc{Pinocchio} (Zeldovich: \citealt{monaco2002,monaco2013}, 3LPT: \citealt{monaco2016}) and \textsc{PThalos} (2LPT: \citealt{pthalo,manera2015}).}
+\tod{Pioneering fast halo/galaxy generating methods have relied on approximate gravity solvers based on Lagrangian perturbation theory (LPT:\citealt{buchert1993,bouchet1995,catelan1995,scocci2002}) to compute the position and mass of the objects, such as \textsc{Pinocchio} (Zeldovich: \citealt{monaco2002,monaco2013}, 3LPT: \citealt{monaco2016}), and \textsc{PThalos} (2LPT: \citealt{pthalo,manera2015}).}
 
 This has the disadvantage of being affected by an inaccurate description of the small scale clustering, and, in particular, of missing the one halo term contribution. As a consequence, the power spectra of such catalogs have systematic deviations towards high values of $k$, already deviating about 10$\%$ at $k\sim0.2\; \hperm$ \citep[][]{monaco2013}.
 
 While fast particle mesh solvers, such as \textsc{cola} or \textsc{FastPM}, are much more precise than LPT based approaches, they are  still computationally too expensive to be suitable for massive production, if one is trying to resolve all the necessary structures required to model next generation of galaxy surveys.
-Therefore three methods were recently proposed: \textsc{patchy} \citep{kitaura2014}, \textsc{QPM} \citep{qpm}, and \textsc{EZmocks} \citep{eazymock}, which do not try to resolve halos (nor galaxies) with the approximate gravity solvers, but just get a reliable large scale dark matter field, which can then be populated with some bias prescription. The gravity solver thus only needs to be accurate on a certain scale, then the halo/galaxy-dark matter connection is exploited to reach a high accuracy, as described above.
-These methods use both different gravity solvers and different bias models. While \textsc{patchy} originally relies on \textsc{alpt}, \textsc{QPM} uses a quick particle mesh solver, and \textsc{EZmocks} uses the Zeldovich linear LPT.
-But more importantly the bias prescription follows very different philosophies. \textsc{QPM} uses a rank ordering scheme relating the halo mass to density peaks. However, a recent study  demonstrated  that the dependence of the halo mass to its environment is not trivial \citep[see][]{zhao2015}.  \textsc{EZmocks}, on the other hand, first modifies the initial power spectrum introducing a tilt to adjust the final two point statistics, correcting hereby the missing one halo term of the approximate gravity solver. Second it imposes the halo PDF, which was shown to determine the 3pt statistics \citep{kitaura2015}.
+
+%Therefore three methods were recently proposed: \textsc{patchy} \citep{kitaura2014}, \textsc{QPM} \citep{qpm}, and \textsc{EZmocks} \citep{eazymock}, which do not try to resolve halos (nor galaxies) with the approximate gravity solvers, but just get a reliable large scale dark matter field, which can then be populated with some bias prescription. The gravity solver thus only needs to be accurate on a certain scale, then the halo/galaxy-dark matter connection is exploited to reach a high accuracy, as described above.
+
+\tod{Therefore four methods were recently proposed: \textsc{patchy} \citep{kitaura2014}, \textsc{QPM} \citep{qpm}, \textsc{EZmocks} \citep{eazymock}, and \textsc{HALOGEN} \citep{halogen}, which do not try to resolve halos (nor galaxies) with the approximate gravity solvers, but just get a reliable large scale dark matter field, which can then be populated with some bias prescription. The gravity solver thus only needs to be accurate on a certain scale, then the halo/galaxy-dark matter connection is exploited to reach a high accuracy, as described above.}
+
+\tod{These methods use both different gravity solvers and different bias models. While \textsc{patchy} originally relies on \textsc{alpt}, \textsc{QPM} uses a quick particle mesh solver, \textsc{EZmocks} uses the Zeldovich linear LPT, and \textsc{HALOGEN} uses 2LPT.}
+But more importantly the bias prescription follows very different philosophies. \textsc{QPM} uses a rank ordering scheme relating the halo mass to density peaks. Large scale halo bias and halo mass function are recovered in this algorithm. \tod{Similarly, \textsc{HALOGEN} relies on first sampling a number of halo masses from a mass function in discrete mass bins. In each mass bin (rank-order from high mass to low mass), halos are assigned to cosmic cells according a distribution function governed by a parameter. This parameter is determined by fitting the two-point function of halos in that mass bin to that of an accurate reference $N$-body catalog. Therefore, this algorithm is designed to recover the mass-dependent halo bias of a target $N$-body simulation.}
+However, a recent study  demonstrated  that the dependence of the halo mass to its environment is not trivial \citep[see][]{zhao2015}.  \textsc{EZmocks}, on the other hand, first modifies the initial power spectrum introducing a tilt to adjust the final two point statistics, correcting hereby the missing one halo term of the approximate gravity solver. Second it imposes the halo PDF, which was shown to determine the 3pt statistics \citep{kitaura2015}.
+
 \textsc{patchy} on the other hand follows a more physical approach, relying on an effective analytical stochastic bias model. 
 In this sense the statistics is not directly imposed as in \textsc{EZmocks}, but fitted through the bias parameters. In fact \textsc{patchy} was shown to be considerably more accurate than \textsc{EZmocks} when assigning halo masses \citep{zhao2015}, and than \textsc{QPM} when fitting the two and three point statistics of the luminous red galaxies (LRGs) in the Baryon Oscillation Spectroscopic Survey (BOSS)  \citep{kitaura2016}. 
 
@@ -306,6 +339,13 @@ Bottom: Ratio between the halo PDFs of the approximate mocks and halo PDF of the
 \caption{\label{fig:bispec} Real-space bispectrum of the BigMD BDM halos and that of the approximate mocks as a function of angle $\alpha_{12}$ between $\mathbf{k}_1$ and $\mathbf{k}_{2}$ for $k_{1}=k_{2}=0.1\; \hperm$ (upper left), $2k_{1}=k_{2}=0.2\; \hperm$ (upper right), $k_{1}=k_{2}=0.15\; \hperm$ (middle left), $k_{1}=k_{2}=0.2\; \hperm$ (middle right), $2k_{1}=k_{2}=0.3\; \hperm$ (lower left), and $2k_{1}=k_{2}=0.4\; \hperm$ (lower right). The BigMD is represent by the solid black line, while \textsc{alpt}-\textsc{patchy} is represented by the dashed red line, and \textsc{FastPM}-\textsc{patchy} is represented by the dashed blue line.}
 \end{figure*}
 
+\tod{\section{Code Integration}}
+%\tod{\subsection{Initial conditions}}
+\tod{In this section, we briefly explain how different pieces of the \textsc{PATCHY} code are connected. The first step is specification of the cosmological parameters and the initial matter power spectrum. Afterwards, the initial conditions can be provided to the \textsc{FastPM} code in the form of a white noise (compatible with the initial power spectrum), or they can be randomly drawn from the power spectrum in the \textsc{FastPM} code.}
+
+\tod{Once the dark matter particles are evolved with the particle-mesh code until the final redshift, the positions of particles are recorded with the \textsc{FastPM} code. Then within the \textsc{PATCHY} code, the final particle positions are then painted onto a mesh with Cloud-in-Cell (CIC). Given a set of \textsc{PATCHY} bias parameters, the density mesh is what is needed to generate a catalog of matter tracers (galaxies/halos).}
+
+\tod{The bias parameters are sampled from the posterior probability distribution in an MCMC wrapper. For every set of bias parameters, a catalog of galaxies/halos is generated from the density mesh with the \textsc{PATCHY} code. Once a catalog is generated, the PDF and the power spectrum of the mock catalogs are evaluated for computation of the likelihood. Then the MCMC chains are evolved with the \textsc{emcee} code.}
 
 \section{Demonstration on an accurate $N$-body based halo catalog}
 \label{sec:test}
