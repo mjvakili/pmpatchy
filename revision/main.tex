@@ -261,14 +261,18 @@ p\big(\mathrm{ref}|\theta \big) = p\big(P_{\rm ref}(k)|\theta \big ) p\big(\rho_
 where Gaussian likelihoods are assumed for $P_{\rm ref}(k)$ and $\rho_{\rm ref}(n)$:
 \ba
 p\big(P_{\rm ref}(k)|\theta \big ) &=& \prod_{k} \frac{1}{\sqrt{2\pi\sigma_k^2}} \\ 
-&\times& \exp[\frac{-1}{2\sigma_k^{2}}]
+&\times& \exp[\frac{-\big(P_{\rm ref}(k)-P_{\rm mock}(k)\big)^2}{2\sigma_k^{2}}],\\
+p\big(\rho_{\rm ref}(n)|\theta \big ) &=& \prod_{n} \frac{1}{\sqrt{2\pi\sigma_n^2}} \\ 
+&\times& \exp[\frac{-\big(\rho_{\rm ref}(n)-\rho_{\rm mock}(n)\big)^2}{2\sigma_n^{2}}].
 \ea
 %p\big(P_{\rm ref}(k)|\theta \big ) &=&\prod_{k} \frac{\exp\big[\frac{\big-(P_{\rm ref}(k)-P_{\rm mock}(k)\big)^{2}}{2\sigma_k^2}\big]}{\sqrt{2\pi\sigma_k^2}},
 %\ea
-
+As a result:
 \ba
--2\ln p(\mathrm{ref}|\theta) = \Sigma_{k}\frac{\big(P_{\rm ref}(k)-P_{\rm mock}(k)\big)^{\tod{2}}}{\sigma^{2}_{k}} \nonumber \\
-+ \Sigma_{n}\frac{\big(\rho_{\rm ref}(n)-\rho_{\rm mock}(n)\big)^{\tod{2}}}{\sigma^{2}_{n}}.
+-2\ln p(\mathrm{ref}|\theta) &=& \Sigma_{k}[\frac{\big(P_{\rm ref}(k)-P_{\rm mock}(k)\big)^{\tod{2}}}{\sigma^{2}_{k}}  \nonumber \\
+&+& \ln(2\pi\sigma_k^2)] \nonumber \\
+&+& \Sigma_{n}[\frac{\big(\rho_{\rm ref}(n)-\rho_{\rm mock}(n)\big)^{\tod{2}}}{\sigma^{2}_{n}} \\
+&+& \ln(2\pi\sigma_n^2)] \nonumber \\
 \label{eq:like}
 \ea
 For the purpose of estimating the bias parameters, we find it sufficient to assume simple uncorrelated noise terms $\{\sigma_{k},\sigma_{n}\}$ in the above likelihood (\ref{eq:like}). We assume $\sigma_{k}^{2}$ to be $4\pi^{2} P_{\rm ref}^{2}(k)/(V_{\rm box}k^{2}\Delta k)$, and $\sigma_n^{2}$ to be $N_n$ where $N_n$ is the number of cells containing $n$ number of halos (including parent halos and subhalos).
@@ -406,6 +410,8 @@ The bias model could be augmented with nonlocal bias terms following \citet[][]{
 
 Fig.~\ref{fig:pdfpower} showed an improved PDF when relying on \textsc{FastPM}. This is expected to have an impact in the three point statistics, which in fact yields better fits towards small scales, as we discuss below. 
 We show our results in terms of bispectrum for six different values of $|\mathbf{k}_1|$ and $|\mathbf{k}_2|$ as a function of the angle between the two vectors $\alpha_{12} = \angle (\mathbf{k}_1 , \mathbf{k}_2)$. The adopted wave numbers are $k_1=k_2=0.1,\; 2k_1=k_2=0.2,\; k_1=k_2=0.15,\; k_1=k_2=0.2,\; 2k_1=k_2=0.3,\; 2k_1=k_2=0.4$ (all wave numbers are expressed in units of $\hperm$). 
+
+\tod{As mentioned previously, the \textsc{HALOGEN} \citealt{halogen} method provides a fast way for generation of mock catalogs. It is similar to the method proposed in this work in that it relies on $(i)$ generation of the density field with an approximate gravity solver (2LPT), $(ii)$ a parametric bias model for assigning halos to a dark matter density grid, and $(iii)$ and an automatic bias estimation by fitting the two-point function.}
 
 We find that in general for both \textsc{alpt} and \textsc{FastPM} there is good agreement between the bispectrum measured from our approximate mock catalogs and that of the BigMultiDark simulation (Fig.~\ref{fig:bispec}). 
 Deviations as large as 15-20\% are expected, as we are using a down-sampled  white noise of the BigMultiDark simulation from $3840^3$ to $960^3$ cells and are on the level of what was found in \citet[][]{kitaura2015}. 
