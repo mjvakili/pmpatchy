@@ -248,7 +248,7 @@ The stochastic bias stands for the shot noise from the transition of the continu
 Production of approximate mock catalogs with \textsc{patchy} requires a reference catalog constructed from the observations or based on an accurate $N$-body simulation. 
 We aim at constraining the parameters describing the deterministic bias $\{\delta_{\rm th},\alpha, \rho_{\epsilon},\epsilon\}$, and the parameter that governs the stochasticity of the halo population $\{\beta\}$.
 
-The bias parameters are estimated such that the statistical summaries of the halos (galaxies) in the \textsc{patchy} mocks match the statistical summaries of the halos (galaxies) in the reference catalog. The set of statistical summaries of the catalog can in principle include number density, bivariate probability distribution function or number of counts-in-cells $\rho$ (hereafter halo PDF), two-point statistics $\xi_{2}$, and higher-order statistics such as the three-point statistics $\xi_{3}$. 
+The bias parameters are estimated such that the statistical summaries of the halos (galaxies) in the \textsc{patchy} mocks match the statistical summaries of the halos (galaxies) in the reference catalog. The set of statistical summaries of the catalog can in principle include number density, bivariate probability distribution function or number of counts-in-cells $\rho$ (), two-point statistics $\xi_{2}$, and higher-order statistics such as the three-point statistics $\xi_{3}$. 
 
 By construction, the \textsc{patchy} mocks reproduce the exact number density of objects in the reference catalog. This comes from the particular choice of normalization in the deterministic bias relation (see Eqs.~\ref{eq:deterministic},\ref{eq:normalization}). In this work, we follow \citet{kitaura2015} and constrain the bias parameters with the halo PDF and the two-point statistics $\xi_{2}$. These two quantities can be computed very fast and the skewness of the halo PDF determines the three point statistics. Given the bias parameters found fitting the PDF and the two-point statistics, we will demonstrate a comparison between the approximate mocks and the reference catalog in terms of the two- and three-point statistics. 
 
@@ -305,9 +305,12 @@ However, a recent study  demonstrated  that the dependence of the halo mass to i
 \textsc{patchy} on the other hand follows a more physical approach, relying on an effective analytical stochastic bias model. 
 In this sense the statistics is not directly imposed as in \textsc{EZmocks}, but fitted through the bias parameters. In fact \textsc{patchy} was shown to be considerably more accurate than \textsc{EZmocks} when assigning halo masses \citep{zhao2015}, and than \textsc{QPM} when fitting the two and three point statistics of the luminous red galaxies (LRGs) in the Baryon Oscillation Spectroscopic Survey (BOSS)  \citep{kitaura2016}. 
 
-Moreover, the approach we follow in \textsc{patchy} tests the validity range of effective bias prescriptions commonly used in large scale structure analysis methods \citep[see e.g.][]{ata2015}.
+\tod{Relying only on particle mesh gravity solvers for production of mock catalogs is more computationally demanding. That is, in order to resolve all structures (and substructures) one needs to run a PM code with a higher resolution than what is required by \textsc{patchy}. For instance \citet{chuang2015} found that in order to reproduce distinct (parent) halos of the BigMultiDark simulation, \textsc{cola} needs a particle-mesh size of $1280^3$. This is far away from reproducing the substructures (subhalos). \textsc{patchy} on the other hand, requires a smaller grid size of $960^3$ for production of distinct (parent) halos and subhalos \citep[see][]{chuang2015}. 
+In this work we use a grid size of $960^3$ for generation of both \textsc{alpt} and \textsc{FastPM} density fields.}
 
-Now for the first time we include a robust MCMC sampling scheme to determine the bias parameters, and have improved the gravity solver with \textsc{FastPM}.
+\tod{Furthermore, the findings of \citet{fastpm} suggest that in order to recover the halo mass function of an accurate $N$-body simulation with a PM solver and a friends-of-friends halo finding algorithm, one needs to choose a force resolution (the ratio of the grid size and the number of particles on side of a PM simulation) greater than or equal to two. That is, the mass resolution of a PM simulation for which the grid size and the number of particles are equal, is not sufficient to resolve distinct halos. On the other hand, using simulations with low mass resolution and stochastic biasing methods such as \textsc{patchy} and \textsc{QPM} can accurately recover the clustering statistics of halos and subhalos in accurate $N$-body simulations.}
+
+Moreover, the approach we follow in \textsc{patchy} tests the validity range of effective bias prescriptions commonly used in large scale structure analysis methods \citep[see e.g.][]{ata2015}. Now for the first time we include a robust MCMC sampling scheme to determine the bias parameters, and have improved the gravity solver with \textsc{FastPM}.
 
 \begin{figure*}
 %\begin{center}
@@ -348,11 +351,12 @@ Bottom: Ratio between the halo PDFs of the approximate mocks and halo PDF of the
 
 \tod{\section{Code Integration}}
 %\tod{\subsection{Initial conditions}}
-\tod{In this section, we briefly explain how different pieces of the \textsc{PATCHY} code are connected. The first step is specification of the cosmological parameters and the initial matter power spectrum. Afterwards, the initial conditions can be provided to the \textsc{FastPM} code in the form of a white noise (compatible with the initial power spectrum), or they can be randomly drawn from the power spectrum in the \textsc{FastPM} code.}
+\tod{In this section, we briefly explain how different pieces of the \textsc{patchy} code are connected. The first step is specification of the cosmological parameters and the initial matter power spectrum. Afterwards, the initial conditions can be provided to the \textsc{FastPM} code in the form of a white noise (compatible with the initial power spectrum), or they can be randomly drawn from the power spectrum in the \textsc{FastPM} code.}
 
-\tod{Once the dark matter particles are evolved with the particle-mesh code until the final redshift, the positions of particles are recorded with the \textsc{FastPM} code. Then within the \textsc{PATCHY} code, the final particle positions are then painted onto a mesh with Cloud-in-Cell (CIC). Given a set of \textsc{PATCHY} bias parameters, the density mesh is what is needed to generate a catalog of matter tracers (galaxies/halos).}
+\tod{Once the dark matter particles are evolved with the particle-mesh code until the final redshift, the positions of particles are recorded with the \textsc{FastPM} code. Then within the \textsc{patchy} code, the final particle positions are painted onto a mesh with Cloud-in-Cell (CIC) algorithm. A set of \textsc{patchy} bias parameters and the density mesh are the main ingredients of generating a catalog of tracers ((galaxies/halos)) of the dark matter density field.}
 
-\tod{The bias parameters are sampled from the posterior probability distribution in an MCMC wrapper. For every set of bias parameters, a catalog of galaxies/halos is generated from the density mesh with the \textsc{PATCHY} code. Once a catalog is generated, the PDF and the power spectrum of the mock catalogs are evaluated for computation of the likelihood. Then the MCMC chains are evolved with the \textsc{emcee} code.}
+\tod{The bias parameters are estimated by MCMC in the following way: 
+In an MCMC wrapper, the posterior probability distribution is defined as a function of \textsc{patchy} bias parameters. When we use the \textsc{emcee} code to sample from this posterior probability distribution in the MCMC wrapper. For each set of bias parameters, a catalog of galaxies/halos is generated from the density mesh with the \textsc{patchy} code. Once a catalog is generated, the PDF and the real-space power spectrum of halos in the mock catalogs are evaluated for computation of the likelihood.}
 
 \section{Demonstration on an accurate $N$-body based halo catalog}
 \label{sec:test}
@@ -389,7 +393,7 @@ Furthermore, parameters corresponding to the exponential cutoff term in the dete
 \subsection{Statistical comparison}
 \label{sec:stats}
 
-In this section we discuss the statistical comparisons between the BDM halo catalog of the BigMultiDark simulation and the halo catalog generated from our method. In particular, the \textsc{FastPM}-\textsc{pathcy} mock is generated using the best-fit bias parameters (see Fig.~\ref{fig:bias}). For the \textsc{alpt}-\textsc{pathcy} mocks we rely on the parameters found from previous \textsc{patchy} studies \citep{kitaura2016}. The halo statistical summaries presented in this work are the number density, the bivariate halo probability distribution function (PDF), the real-space power spectrum and the real-space bispectrum. 
+In this section we discuss the statistical comparisons between the BDM halo catalog of the BigMultiDark simulation and the halo catalog generated from our method. In particular, the \tod{\textsc{FastPM}-\textsc{patchy}} mock is generated using the best-fit bias parameters (see Fig.~\ref{fig:bias}). For the \tod{\textsc{alpt}-\textsc{patchy}} mocks we rely on the parameters found from previous \textsc{patchy} studies \citep{kitaura2016}. The halo statistical summaries presented in this work are the number density, the bivariate halo probability distribution function (PDF), the real-space power spectrum and the real-space bispectrum. 
 
 By construction our method reproduces the exact number density of halos in the reference catalog (Eq.~\ref{eq:normalization}). We observe that the bivariate PDF (or halo counts-in-cells) of the reference catalog can be reproduced with good accuracy (Fig.~\ref{fig:pdfpower}). 
 
@@ -457,10 +461,11 @@ In summary, the work presented here contributes to set the basis for a method ab
 
 \section*{Acknowledgments}
 
-We are grateful to David~W.~Hogg, Michael~R.~Blanton, Uros~Seljak, Roman~Scoccimarro, and Jeremy~L.~Tinker for discussions related to this work.
+We are grateful to David~W.~Hogg, Jeremy~L.~Tinker, Michael~R.~Blanton, Uros~Seljak, Roman~Scoccimarro, and Alex~I.~Malz for discussions related to this work.
 MV is particularly thankful to David~W.~Hogg for his continuous support during the completion of this work. We thank David~W.~Hogg and Alex~I.~Malz for reading and commenting on the manuscript.
 FSK thanks Uros~Seljak for hospitality at UC Berkeley and LBNL during January to July 2016. During this time he met MV and was able to collaborate with YF.
-This work was supported by the NSF grant AST-1517237. GY acknowledges financial support from MINECO/FEDER  (Spain) under research grant AYA2015-63810-P. Most of the computations in this work were carried out in the New York University High Performance Computing Mercer facility. We thank Shenglong~Wang, the administrator of the NYU HPC center, for his consistent support throughout the completion of this study. We also thank Jeremy~L.~Tinker, Dan~Foreman-Mackey, and Mulin~Ding for providing some of the computational facilities used in this investigation.
+This work was supported by the NSF grant AST-1517237. GY acknowledges financial support from MINECO/FEDER  (Spain) under research grant AYA2015-63810-P. Most of the computations in this work were carried out in the New York University High Performance Computing Mercer facility. We thank Shenglong~Wang, the administrator of the NYU HPC center, for his consistent support throughout the completion of this study.
+%We also thank Jeremy~L.~Tinker, Dan~Foreman-Mackey, and Mulin~Ding for providing some of the computational facilities used in this investigation.
 
 The CosmoSim database used in this paper is a service by the Leibniz-Institute for Astrophysics Potsdam (AIP). The MultiDark database was developed in cooperation with the Spanish MultiDark Consolider Project CSD2009-00064. The authors gratefully acknowledge the Gauss Centre for Supercomputing e.V. (www.gauss-centre.eu) and the Partnership for Advanced Supercomputing in Europe (PRACE, www.prace-ri.eu) for funding the MultiDark simulation project by providing computing time on the GCS Supercomputer SuperMUC at Leibniz Supercomputing Centre (LRZ, www.lrz.de).
 \bibliographystyle{mn2e}
