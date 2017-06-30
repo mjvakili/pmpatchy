@@ -75,14 +75,28 @@ Chuang etal. (1412.7729).
 These sentences should be complemente by mentining to what degree are 
 they accurate lie accurate to X% to k=Y Mpc h^-1.
 
+We have completed those sentences by mentioning the degrees of accuracy.
 
 >Other relevant points:
 
 >Maybe this is trivial, but what is the bivariate halo PDF, does it mean eq 3?
 
+Equation 3 is the deterministic bias relation that determines the expected number 
+of halos in a cosmic volume. For each cosmic cell, we then use this bias relation 
+to draw a random number of halos from the negative binomial distribution (eq. 5).
+
+The bivariate PDF is a halo statistics which is given by the number of halo counts-in-cells.
+In other words, that is the number of cells that host a given number of halos. Alternatively, one 
+can think of this as the histogram of the number of halos per cosmic cell. 
+We have clarified this in the abstract and in paragraph 9 of introduction 
+by adding "counts-in-cells" in parantheses after mentioning bivariate PDF. Furthermore, in paragraph 2 
+of Section 2.3 we have now added a sentence to clarify the definition of bivariate halo PDF.
+
 >Section 2.3: is there a reason why the likelihood should be evenly split between 
 P(k) bit and rho(n)? What would prevent one to double the number of k bins and 
 half the number of density bins? Would you expect the same result?
+
+We have now expanded Section 2.3 to explain the derivation of the log-likelihood term 
 
 >Section 2.4: "COLA or FastPM computationally too expensive for massive production" 
 of next generation of galaxy surveys. Please give details comparing with PATCHY.
@@ -90,6 +104,8 @@ of next generation of galaxy surveys. Please give details comparing with PATCHY.
 >Summary:
 
 >"major step" -- better "a move forward towards"
+
+We have changed it to "a move forward towards".
 
 >"previous studies overestimate the contribution of the power due deviation of Poisson" 
 -- are these the ALP powers? How clear is this that the reason is the Poisson undersestimation.
@@ -99,9 +115,14 @@ more easily described in RSD". ---- This makes no sense. Did you leave the analy
 for the future because it was more easily dscribed? I understand you don't need to do that, 
 just mention it will be presented in future work.
 
+We have changed it to "it will be presented in future work".
 
 >Minor bits:
 
 >Fig 1: mention resolution of ALPT
+
+We mention the resolution of ALPT in the caption.
+
 >Fig 2: mention what the vertical lines are
 
+We expanded the caption to mention that the vertical lines correspond to 68% and 50% confidence intervals of the distributions over the bias parameters of PATCHY.
