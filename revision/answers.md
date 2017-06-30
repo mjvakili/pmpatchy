@@ -96,10 +96,22 @@ of Section 2.3 we have now added a sentence to clarify the definition of bivaria
 P(k) bit and rho(n)? What would prevent one to double the number of k bins and 
 half the number of density bins? Would you expect the same result?
 
-We have now expanded Section 2.3 to explain the derivation of the log-likelihood term 
+We have now expanded Section 2.3 to explain the derivation of the log-likelihood term.
+We write down the joint probability of powerspectrum and pdf given bias 
+parameters as the multiplication of the probability of powerspectrum and probability 
+of pdf given the bias parameters. We then assume that each of these probability distributions 
+are Gaussian. This leads us to the log-likelihood given in Equation (9).
+We have also added another paragraph explaining that the relative weighting between P(k) 
+and rho(n) is governed by their corresponding errorbars. More coarse sampling of k 
+the errorbar on P(k) larger. Similarly, a more coarse sampling of n, makes the errorbars 
+on PDF larger. Giving more weight to the power spectrum makes the results in 
+higher stochasticity (higher beta) which leads to higher small-scale power but less 
+accurate halo PDF and less accurate bispectrum.
 
 >Section 2.4: "COLA or FastPM computationally too expensive for massive production" 
 of next generation of galaxy surveys. Please give details comparing with PATCHY.
+
+
 
 >Summary:
 
