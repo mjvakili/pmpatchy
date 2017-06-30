@@ -108,7 +108,7 @@ Furthermore, galaxy mock catalogs are required to study systematics in galaxy su
 In this investigation, we present a fast and accurate approach for generation of mock catalogs for the upcoming galaxy surveys. 
 Our method relies on low-resolution approximate gravity solvers to simulate the large scale dark matter field, which we then populate with halos according to a flexible nonlinear and stochastic bias model. 
 In particular, we extend the \textsc{patchy} code with an efficient particle mesh algorithm to simulate the dark matter field (the \textsc{FastPM} code), and with an efficient and robust MCMC method relying on the \textsc{emcee} code for constraining the parameters of the bias model. 
-Using the halos in the BigMultiDark high-resolution $N$-body simulation as a reference catalog, we demonstrate that our technique can model the bivariate probability distribution function, power spectrum, and bispectrum of halos in the reference catalog. Specifically, we show that the new ingredients permit us to reach percentage accuracy in the power spectrum up to $k\sim 0.4\; \hperm$ (within 5\% up to $k\sim 0.6\; \hperm$) with accurate bispectra improving previous results based on Lagrangian perturbation theory.
+Using the halos in the BigMultiDark high-resolution $N$-body simulation as a reference catalog, we demonstrate that our technique can model the bivariate probability distribution function \tod{(counrs-in-cells)}, power spectrum, and bispectrum of halos in the reference catalog. Specifically, we show that the new ingredients permit us to reach percentage accuracy in the power spectrum up to $k\sim 0.4\; \hperm$ (within 5\% up to $k\sim 0.6\; \hperm$) with accurate bispectra improving previous results based on Lagrangian perturbation theory.
 \end{abstract}
 
 \begin{keywords}
@@ -127,7 +127,7 @@ The most pressing challenges ahead of simulating a large number of catalogs are:
 
 High-resolution $N$-body simulations are ideal venues for reproducing the dark matter clustering accurately. But production of a large number of density field realizations with $N$-body simulations is not computationally feasible. In order to alleviate the computational cost of $N$-body simulations, several methods based on approximate gravity solvers have been introduced. Methods based on higher order Lagrangian perturbation theory (\citealt{buchert1993,bouchet1995,catelan1995,monaco2002,scocci2002,alpt}), Zeldovich approximation (\citealt{eazymock}), and approximate $N$-body simulations (\citealt{cola2013,qpm,howlet2015,cola,fastpm,ice_cola,koda}) have been demonstrated to be promising for fast generation of dark matter density field. Sampling the structures such as galaxies and halos from the dark matter density field requires an additional step. Identification of virialized regions of matter overdensity is either done through a biasing scheme (\citealt{kitaura2014,qpm}) or is done through application of friends-of-friend algorithm (\citealt{pthalo,koda,fastpm}). Methods that employ a biasing scheme need to be calibrated such that they are statistically consistent with accurate $N$-body simulations or observations. 
 
-The \textsc{patchy} method (\citealt{kitaura2014,kitaura2015}) produces mock catalogs by first generating dark matter field with Lagrangian Perturbation Theory modified with spherical collapse model on small scales ($r \leq 2 \; \mperh$) and then sampling galaxies (halos) from the density field using nonlinear stochastic biasing introduced in \citet{kitaura2014}. This method has been shown to reproduce the two-point clustering \tod{with $\sim$2\% accuracy} down to $k \sim 0.3 \; \hperm$ and the counts-in-cell of the massive halos in an accurate $N$-body simulation. \citet{kitaura2015} demonstrate that the mock catalogs generated using this technique are capable of accurately describing the halo bispectrum in the reference $N$-body simulations. Furthermore, \citet{kitaura2016} used this method for massive production of mock catalogs for the cosmological analysis of the completed SDSS III Baryon Oscillation Spectroscopic Survey DR12 galaxy sample. 
+The \textsc{patchy} method (\citealt{kitaura2014,kitaura2015}) produces mock catalogs by first generating dark matter field with Lagrangian Perturbation Theory modified with spherical collapse model on small scales ($r \leq 2 \; \mperh$) and then sampling galaxies (halos) from the density field using nonlinear stochastic biasing introduced in \citet{kitaura2014}. This method has been shown to reproduce the two-point clustering \tod{with $\sim$2\% accuracy} down to $k \sim 0.3 \; \hperm$ and the counts-in-cells of the massive halos in an accurate $N$-body simulation. \citet{kitaura2015} demonstrate that the mock catalogs generated using this technique are capable of accurately describing the halo bispectrum in the reference $N$-body simulations. Furthermore, \citet{kitaura2016} used this method for massive production of mock catalogs for the cosmological analysis of the completed SDSS III Baryon Oscillation Spectroscopic Survey DR12 galaxy sample. 
 
 Alternatively, computation of error covariance matrices can be delivered with analytical models (\citealt{feldman1994,smith2008,crocce2011,sun2013,grieb2016,klaus2016}). 
 These methods are promising, though still need further investigation especially including sysytematic effects, such as the survey geometry. They will potentially permit us to use a smaller number of mock catalogs to obtain accurate covariance matrices.
@@ -141,7 +141,7 @@ In this investigation, we introduce an MCMC method for calibration of the bias m
 Furthermore, we replace the dark matter gravity solver of the code with the fast particle-mesh approximate $N$-body solver implemented in the \textsc{FastPM} code (\citealt{fastpm}). The advantage of the \textsc{FastPM} algorithm over other methods based on particle-mesh is its low memory requirements as well as accurate large scale growth. In addition, the dark matter density field produced by the \textsc{FastPM} code yields better nonlinear clustering than that of the perturbation theory. 
 
 As a proof of concept, we make use of the halos in the BigMultiDark Planck high-resolution $N$-body simulation (\citealt{multidark}). This catalog has been extensively used for validation, comparison and production of galaxy mock catalogs (\citealt{chuang2015,zhao2015,kitaura2016,sergio2016}). 
-In addition, we will make a statistical comparison between our \textsc{patchy} mocks and the reference catalog. We present the number density, halo PDF, and halo two-point statistics. 
+In addition, we will make a statistical comparison between our \textsc{patchy} mocks and the reference catalog. We present the number density, halo PDF \tod{(halo counts-in-cells)}, and halo two-point statistics. 
 We also present our results in terms of the three-point statistics since it is rising as a major complementary approach in various large-scale structure analyses \citep{slepian2015,gill2015a,gill2015b,guo2016,slepian2016a,slepian2016b,gill2017}. 
 
 
@@ -167,7 +167,7 @@ Let us first describe in \S \ref{sec:sf} the new implementation of the structure
 \includegraphics[width=0.6\columnwidth]{fastpm_small}
 \includegraphics[width=0.6\columnwidth]{alpt_small}
 \end{tabular}
-\caption{\label{fig:darkmatter} Dark matter overdensity $\delta = \rho_{\rm m}/\rho -1$ slices of 20 $\mperh$ from the high-resolution BigMultiDark simulation (left panels) , the low-resolution \textsc{FastPM} simulation (central panels) and from the \textsc{alpt} simulation (right panels), taking a subvolume of $(1250 \;\mperh)^3$ (top panels), $(625 \;\mperh)^3$ (middle panels), and $(312.5 \;\mperh)^3$ (bottom panels). The structures in the high-resolution $N$-body simulation and the low-resolution \textsc{FastPM} simulation look very similar inspite of having very different resolutions ($3840^3$ vs $960^3$ particles). The low-resolution \textsc{alpt} simulation looks more diffuse.}
+\caption{\label{fig:darkmatter} Dark matter overdensity $\delta = \rho_{\rm m}/\rho -1$ slices of 20 $\mperh$ from the high-resolution BigMultiDark simulation (left panels) , the low-resolution \textsc{FastPM} simulation (central panels) and from the \textsc{alpt} simulation (right panels), taking a subvolume of $(1250 \;\mperh)^3$ (top panels), $(625 \;\mperh)^3$ (middle panels), and $(312.5 \;\mperh)^3$ (bottom panels). The structures in the high-resolution $N$-body simulation and the low-resolution \textsc{FastPM} simulation look very similar inspite of having very different resolutions ($3840^3$ vs $960^3$ particles). The low-resolution \textsc{alpt} simulation \tod{with a resolution of $960^3$} looks more diffuse.}
 \end{figure*}
 
 \subsection{Structure formation model}
@@ -286,7 +286,7 @@ The stochastic bias stands for the shot noise from the transition of the continu
 Production of approximate mock catalogs with \textsc{patchy} requires a reference catalog constructed from the observations or based on an accurate $N$-body simulation. 
 We aim at constraining the parameters describing the deterministic bias $\{\delta_{\rm th},\alpha, \rho_{\epsilon},\epsilon\}$, and the parameter that governs the stochasticity of the halo population $\{\beta\}$.
 
-The bias parameters are estimated such that the statistical summaries of the halos (galaxies) in the \textsc{patchy} mocks match the statistical summaries of the halos (galaxies) in the reference catalog. The set of statistical summaries of the catalog can in principle include number density, bivariate probability distribution function or number of counts-in-cells $\rho$ (), two-point statistics $\xi_{2}$, and higher-order statistics such as the three-point statistics $\xi_{3}$. 
+The bias parameters are estimated such that the statistical summaries of the halos (galaxies) in the \textsc{patchy} mocks match the statistical summaries of the halos (galaxies) in the reference catalog. The set of statistical summaries of the catalog can in principle include number density, bivariate probability distribution function or number of counts-in-cells $\rho$ (), two-point statistics $\xi_{2}$, and higher-order statistics such as the three-point statistics $\xi_{3}$. \tod{Note that the number of counts-in-cells determines is given by the number of cells that contain a given number of halos.} 
 
 By construction, the \textsc{patchy} mocks reproduce the exact number density of objects in the reference catalog. This comes from the particular choice of normalization in the deterministic bias relation (see Eqs.~\ref{eq:deterministic},\ref{eq:normalization}). In this work, we follow \citet{kitaura2015} and constrain the bias parameters with the halo PDF and the two-point statistics $\xi_{2}$. These two quantities can be computed very fast and the skewness of the halo PDF determines the three point statistics. Given the bias parameters found fitting the PDF and the two-point statistics, we will demonstrate a comparison between the approximate mocks and the reference catalog in terms of the two- and three-point statistics. 
 
@@ -298,9 +298,9 @@ p\big(\mathrm{ref}|\theta \big) = p\big(P_{\rm ref}(k)|\theta \big ) p\big(\rho_
 \ee
 where Gaussian likelihoods are assumed for $P_{\rm ref}(k)$ and $\rho_{\rm ref}(n)$:
 \ba
-p\big(P_{\rm ref}(k)|\theta \big ) &=& \prod_{k} \frac{1}{\sqrt{2\pi\sigma_k^2}} \\ 
+p\big(P_{\rm ref}(k)|\theta \big ) &=& \prod_{k} \frac{1}{\sqrt{2\pi\sigma_k^2}} \nonumber \\ 
 &\times& \exp[\frac{-\big(P_{\rm ref}(k)-P_{\rm mock}(k)\big)^2}{2\sigma_k^{2}}],\\
-p\big(\rho_{\rm ref}(n)|\theta \big ) &=& \prod_{n} \frac{1}{\sqrt{2\pi\sigma_n^2}} \\ 
+p\big(\rho_{\rm ref}(n)|\theta \big ) &=& \prod_{n} \frac{1}{\sqrt{2\pi\sigma_n^2}} \nonumber \\ 
 &\times& \exp[\frac{-\big(\rho_{\rm ref}(n)-\rho_{\rm mock}(n)\big)^2}{2\sigma_n^{2}}].
 \ea
 }
@@ -309,16 +309,15 @@ p\big(\rho_{\rm ref}(n)|\theta \big ) &=& \prod_{n} \frac{1}{\sqrt{2\pi\sigma_n^
 %\ea
 As a result:
 \ba
--2\ln p(\mathrm{ref}|\theta) &=& \Sigma_{k}[\frac{\big(P_{\rm ref}(k)-P_{\rm mock}(k)\big)^{\tod{2}}}{\sigma^{2}_{k}}  \nonumber \\
-&+& \ln(2\pi\sigma_k^2)] \nonumber \\
-&+& \Sigma_{n}[\frac{\big(\rho_{\rm ref}(n)-\rho_{\rm mock}(n)\big)^{\tod{2}}}{\sigma^{2}_{n}} \\
-&+& \ln(2\pi\sigma_n^2)] \nonumber \\
-\label{eq:like}
+-2\ln p(\mathrm{ref}|\theta) &=& \sum_{k}\Big[\frac{\big(P_{\rm ref}(k)-P_{\rm mock}(k)\big)^{\tod{2}}}{\sigma^{2}_{k}}  \nonumber \\
+&+& \ln(2\pi\sigma_k^2) \Big] \nonumber \\
+&+& \sum_{n}\Big[\frac{\big(\rho_{\rm ref}(n)-\rho_{\rm mock}(n)\big)^{\tod{2}}}{\sigma^{2}_{n}}  \nonumber \\
+&+& \ln(2\pi\sigma_n^2)\Big] \label{eq:like}
 \ea
 }
 For the purpose of estimating the bias parameters, we find it sufficient to assume simple uncorrelated noise terms $\{\sigma_{k},\sigma_{n}\}$ in the above likelihood (\ref{eq:like}). We assume $\sigma_{k}^{2}$ to be $4\pi^{2} P_{\rm ref}^{2}(k)/(V_{\rm box}k^{2}\Delta k)$, and $\sigma_n^{2}$ to be $N_n$ where $N_n$ is the number of cells containing $n$ number of halos (including parent halos and subhalos).
 
-\tod{In Eq.~\ref{eq:like}, a Gaussian likelihood is assumed. It is worth noting that the relative weighting between the two terms in the likelihood function is determined by $\sigma_k$ and $\sigma_n$. For instance, a more coarse sampling of the power spectrum will increase $\delta k$ and as a result, it will reduce $\sigma_k$. At the same time, such coarse sampling of the power spectrum reduces the prediction strength of the denominator. Furthermore, Dropping every other term in the summation corresponding to the PDF will decrease $N_n$ and $\sigma_n.$} 
+\tod{In Eq.~\ref{eq:like}, a Gaussian likelihood is assumed. It is worth noting that the relative weighting between the two terms in the likelihood function is determined by $\sigma_k$ and $\sigma_n$. For instance, a more coarse sampling of the power spectrum will increase $\Delta k$ and as a result, it reduces $\sigma_k$. Dropping every other term in the summation corresponding to the PDF increases $N_n$ and $\sigma_n$ as a result. Therefore, a more coarse sampling of either summation terms in the log-likelihood (\ref{eq:like}) reduces the predictability power of that term. We find that using that giving more weight to the power-spectrum for instance results in more deviations from Poissonity governed by the parameter $\beta$. Higher stochasticity (high $\beta$) leads to enhancement of small-scale power but at the same time makes worsens the quality of the fit for halo PDF. This leads to less accurate bispectrum.} 
 
 Furthermore, we choose a flat prior for all parameters of the bias model with the following lower and upper bounds: $-1<\delta_{\rm th}<2$, $0<\alpha<1$, $0<\beta<1$, $0<\rho_{\epsilon}<1$, and $0<\epsilon<1$.
 
@@ -353,7 +352,7 @@ Moreover, the approach we follow in \textsc{patchy} tests the validity range of 
 \begin{figure*}
 %\begin{center}
 \includegraphics[width=2\columnwidth]{posterior}
-\caption{\label{fig:bias} Posterior probability distribution of the \textsc{patchy} bias parameters $\{\delta_{\rm th},\alpha,\beta,\rho_{\epsilon},\epsilon\}$. The contours mark the 68$\%$ and the 95$\%$ confidence intervals of the posterior probabilities. This plot is made using the open-source software \textsc{corner} (\citealt{corner}).}
+\caption{\label{fig:bias} Posterior probability distribution of the \textsc{patchy} bias parameters $\{\delta_{\rm th},\alpha,\beta,\rho_{\epsilon},\epsilon\}$. The contours mark the 68$\%$ and the 95$\%$ confidence intervals of the posterior probabilities. \tod{The vertical lines represent the 68$\%$ and 50$\%$ confidence intervals in the marginalized distribution over \textsc{patchy} bias parameters.}. This plot is made using the open-source software \textsc{corner} (\citealt{corner}).}
 %\end{center}
 \end{figure*}
 
@@ -439,7 +438,7 @@ Furthermore, parameters corresponding to the exponential cutoff term in the dete
 \subsection{Statistical comparison}
 \label{sec:stats}
 
-In this section we discuss the statistical comparisons between the BDM halo catalog of the BigMultiDark simulation and the halo catalog generated from our method. In particular, the \tod{\textsc{FastPM}-\textsc{patchy}} mock is generated using the best-fit bias parameters (see Fig.~\ref{fig:bias}). For the \tod{\textsc{alpt}-\textsc{patchy}} mocks we rely on the parameters found from previous \textsc{patchy} studies \citep{kitaura2016}. The halo statistical summaries presented in this work are the number density, the bivariate halo probability distribution function (PDF), the real-space power spectrum and the real-space bispectrum. 
+In this section we discuss the statistical comparisons between the BDM halo catalog of the BigMultiDark simulation and the halo catalog generated from our method. In particular, the \tod{\textsc{FastPM}-\textsc{patchy}} mock is generated using the best-fit bias parameters (see Fig.~\ref{fig:bias}). For the \tod{\textsc{alpt}-\textsc{patchy}} mocks we rely on the parameters found from previous \textsc{patchy} studies \citep{kitaura2016}. The halo statistical summaries presented in this work are the number density, the bivariate halo probability distribution function \tod{(halo counts-in-cells)}, the real-space power spectrum and the real-space bispectrum. 
 
 By construction our method reproduces the exact number density of halos in the reference catalog (Eq.~\ref{eq:normalization}). We observe that the bivariate PDF (or halo counts-in-cells) of the reference catalog can be reproduced with good accuracy (Fig.~\ref{fig:pdfpower}). 
 
