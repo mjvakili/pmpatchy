@@ -111,7 +111,11 @@ accurate halo PDF and less accurate bispectrum.
 >Section 2.4: "COLA or FastPM computationally too expensive for massive production" 
 of next generation of galaxy surveys. Please give details comparing with PATCHY.
 
-
+We have expanded Section 2.4 to explain why relying only on particle-mesh gravity solvers such as 
+COLA or FastPM could be computationaly demanding for massive mock generation. We have added two paragraphs 
+to section 2.4 to emphasize that in comparison with PATHCY, methods that make use of PM gravity solvers only 
+have to be run with higher resolution (higher gridsize) in order to resolve all the structures/halos. 
+We reiterate the findings of Feng etal (2016) and Chuang etal (2015).
 
 >Summary:
 
