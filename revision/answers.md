@@ -115,7 +115,8 @@ We have expanded Section 2.4 to explain why relying only on particle-mesh gravit
 COLA or FastPM could be computationaly demanding for massive mock generation. We have added two paragraphs 
 to section 2.4 to emphasize that in comparison with PATHCY, methods that make use of PM gravity solvers only 
 have to be run with higher resolution (higher gridsize) in order to resolve all the structures/halos. 
-We reiterate the findings of Feng etal (2016) and Chuang etal (2015).
+We reiterate the findings of Feng etal (2016) and Chuang etal (2015) according to which, the mass resolution of 
+PM solvers need to be high to resolve distinct halos.
 
 >Summary:
 
