@@ -31,7 +31,7 @@ posterior probability. In the MCMC wrapper, every time a set of PATCHY bias para
 the saved density mesh with galaxies/halos. Furthermore, we explain that for every catalog, power spectrum and 
 PDF are calculated and passed to the likelihood function. 
 
->While the title mention gravity solvers there is parctically no explanation on 
+>While the title mention gravity solvers there is practically no explanation on 
 this a part from a reference of Feng et al. This being highlined in the abstract 
 and conclusions by the authors it requires a considerable expansion; 
 this could be done extending section 2 or a new section.
@@ -63,7 +63,7 @@ Furthermore, we have expanded paragraph 5 in order to describe the biasing techn
 for generation of mocks. After a brief discussion of the biasing technique in the 
 code QPM, we describe the main ingredients of HALOGEN: sampling from a mass function, rank-ordering the 
 halo mass bins and assuming a bias model for each mass bin, and finally calibrating the bias model 
-by fitting the tow-point correlation function. 
+by fitting the two-point correlation function. 
 
 In terms of reproducing the distribution of BDM halos in the BigMultiDark simulation, 
 Chuang etal. (1412.7729) presents a comparison of different approximate methods including 
