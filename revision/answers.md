@@ -56,8 +56,8 @@ that would be good too.
 
 We have now included a brief discussion of the code HALOGEN in section 2.4 where we discuss comparison 
 with other methods. In particular in paragraph 4 of subsection 2.4, we have included HALOGEN in 
-the list of methods (PATCHY, EZmocks, QPM) that rely on approximate gravity solvers and stochastic biasing 
-schemee for generation of mock galaxy/halo catalogs. 
+the list of methods (PATCHY, EZmocks, QPM, HALOGEN) that rely on approximate gravity solvers and stochastic biasing 
+scheme for generation of mock galaxy/halo catalogs. 
 
 Furthermore, we have expanded paragraph 5 in order to describe the biasing technique employed in HALOGEN 
 for generation of mocks. After a brief discussion of the biasing technique in the 
@@ -99,26 +99,26 @@ half the number of density bins? Would you expect the same result?
 
 We have now expanded Section 2.3 to explain the derivation of the log-likelihood term.
 We write down the joint probability of power spectrum and pdf given bias 
-parameters as the multiplication of the probability of power spectrum and probability 
+parameters as the multiplication of the probability of power spectrum and the probability 
 of pdf given the bias parameters. We then assume that each of these probability distributions 
 are Gaussian. This leads us to the log-likelihood given in Equation (9).
 
 We have also added another paragraph explaining that the relative weighting between P(k) 
-and rho(n) is governed by their corresponding errorbars. More coarse sampling of k 
-makes the errorbar on P(k) larger. Similarly, a more coarse sampling of n, makes the errorbars 
-on PDF larger. Giving more weight to the power spectrum results in 
-higher stochasticity (higher beta) which consequently, leads to higher 
-small-scale power but less accurate halo PDF and less accurate bispectrum.
+and rho(n) is governed by their corresponding binsizes. For example, choosing a wide binsize for the 
+halo PDF makes the PDF errorbars larger. This gives more weight to the power spectrum which results in 
+higher stochasticity (lower beta). Consequently, this leads to higher small-scale power but at the 
+cost of less accurate halo PDF and also less accurate bispectrum.
 
 >Section 2.4: "COLA or FastPM computationally too expensive for massive production" 
 of next generation of galaxy surveys. Please give details comparing with PATCHY.
 
 We have expanded Section 2.4 to explain why relying only on particle-mesh gravity solvers such as 
-COLA or FastPM could be computationally demanding for massive mock generation. We have added two paragraphs 
-to section 2.4 to emphasize that in comparison with PATCHY, methods that make use of PM gravity solvers 
-have to be run with higher resolution (higher gridsize) in order to resolve all the structures/halos. 
-We reiterate the findings of Feng etal (2016) and Chuang etal (2015) according to which, the mass resolution of 
-PM solvers need to be high to resolve distinct halos.
+COLA or FastPM could be computationally demanding for massive mock generation. In particular, 
+we have added two paragraphs to section 2.4 to emphasize that in comparison with PATCHY, 
+methods that make use of PM gravity solvers have to be run with higher resolution (higher gridsize) 
+in order to resolve all the structures/halos. We reiterate the findings of Feng etal (2016) 
+and Chuang etal (2015) according to which, the mass resolution of PM solvers needs to be high 
+to resolve distinct halos.
 
 >Summary:
 
@@ -146,4 +146,6 @@ We mention the resolution of ALPT in the caption.
 
 >Fig 2: mention what the vertical lines are
 
-We expanded the caption to mention that the vertical lines correspond to best estimate and the error bars corresponding to the 50% and 68% confidence intervals obtained from the marginalized posterior distributions over the bias parameters of PATCHY.
+We expanded the caption to mention that the vertical lines correspond to best estimate and the error bars 
+corresponding to the 50% and 68% confidence intervals obtained from the marginalized posterior distributions 
+over the bias parameters of PATCHY.
